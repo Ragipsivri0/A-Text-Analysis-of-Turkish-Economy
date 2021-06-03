@@ -1,0 +1,342 @@
+---
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source("R Scripts/script.R")
+```
+
+# A Text Analysis of Turkish Economy (1996-2020) {.tabset .tabset-fade}
+<p style="text-indent: 40px">
+<font size="4">
+The aim of the project is to identify major shifts in economic policy priorities in Turkey in the context of changing domestic and foreign economic conditions. We download and read the programs on SBB's website using the R program with the "textreadr" library. By cleaning the data, we have organized the data we will use. "Tidytext" library was used for this. Graphs were drawn by drawing data related to policies written in the project description. OECD, World Bank, and PENN Source Table resources were used. In total, 34 categories of data were drawn and organized from 3 different sources, and then 32 graphs were drawn. The graphics were tried to be explained in perspectives of economics discipline. In addition, correlations between necessary data and words, words and situations were investigated. However, for some data and words, the correlation appears to be irrelevant or insignificant.
+</font>
+</p>
+<p style="text-indent: 40px">
+<font size="4">
+"grepl" and "ldply" functions were used for calculating frequencies of words. "ldply" function does not count "büyümeyi" if we are searching the word "büyüme", but "grepl" does. If we are searching the word "su" with "grepl", it counts also the words like "usul, husus, sunulan", but "ldply" does not. Thus, for accuracy, considering the structure of the word we will search, we used different functions.
+</p>
+## GDP Per Capita{.tabset .tabset-fade}
+
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(gdppc_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: World Development Indicators", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('GDP per capita',
+                                    '<br>',
+                                    '<sup>',
+                                    '(constant 2010 US$)',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+Gross Domestic Product shows an economy’s basic situation, and it is significant to because historical trends and occasions affect GDP. GDP per capita, on the other hand, is showed by dividing GDP with population in the country. In our case, GDP per capita graph shows us there is an increasing trend from 1996 to 2020; however, from 1996 to 2001, there is not a good improvement in the economy, and the crisis of 1998, 2001 and 2008 has seen as a downturn in the chart. We searched mentions in SBB reports: “üretim”, “enerji”, “ticaret”, “kriz” or “production”, “energy”, “trade”, “crisis”. The energy production graph and its mention above have a correlation with GDP per capita, the energy production increased as GDP increased, and the downturns. Production also has a similar increased mention as economy has grown. However, the mention of “trade” has a different graph. In the crisis periods (2001 and 2008), the mentions increased, but from initial point of 1996 to end point 2020, we can say that there is a similar trend between GDP per capita and trade mention.<strong>Therefore, mentioning trade shows us a different perspective, it is mentioned exactly in the bad times. Furthermore, crisis mention is also important because it is mentioned in the downturn periods in GDP per capita that we see in graphs.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+
+plot_words(C_List, "üretim")
+
+plot_words(C_List, "ticaret")
+
+plot_words(C_List, "enerji")
+
+plot_words(C_List, "kriz")
+```
+
+## Economic Growth{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(econgrowth_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: World Development Indicators", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Economic Growth',
+                                    '<br>',
+                                    '<sup>',
+                                    'in percentages(%)',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+As it is seen in the Economic Growth data taken by World Development Indicators, there is sharply declines in 1999, 2001 and 2009, these are due to economic crises. There have been sharply increases after the crisis. It achieves the top in 2011. The graphs below; on the other hand, show the text of “ekonomik” and “büyüme” or “economic” and “growth” in our data from 1996 to 2020. To compare the graphs above and below, we should look the period of 1996 to 2020. <strong>The charts below show that the rate of mentions of “economic” at the highest level in 2001, and the mention of “growth” shows increasing trend. The words "economic" and "growth" are used less frequently, while economic growth is at a certain level. </strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+p1 <- plot_words_grepl(C_List, "ekonomik")
+p2 <- plot_words_grepl(C_List, "büyüme")
+p1
+p2
+```
+
+## Inflation Rate{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(inflation_rate_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: World Development Indicators", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Inflation Rate',
+                                    '<br>',
+                                    '<sup>',
+                                    'in percentages(%)',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+As seen in the Inflation Rate data received by the World Development Indicators, there is declines from 1997 to 2005, but after 2005, the inflation rate continuous with fluctuations. Inflation rate tends to increase with fluctuations. The graph below shows the text of “enflasyon” or “inflation” in our data from 1996 to 2020. <strong>Inflation rate data and the word of “inflation” in the reports are not met correctly.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+plot_words_grepl(C_List, "enflasyon")
+```
+
+## Total Factor Productivity{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(tfp_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: Penn World Tables 9.1", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Total Factor Productivity',
+                                    '<br>',
+                                    '<sup>',
+                                    'at constant national prices (2011 = 1)',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+As seen in the Total Factor Productivity (TFP) data received by the Penn World Tables 9.1, we see sudden declines in times of crisis in 2001 and 2009. The top level of the TFP is seen in the 2006. The graph below, on the other hand, shows the text of “verimlilik” or “productivity” in our data, from 1996 to 2020. After the 2001 and 2009 crisis, the increases are seen in the word of “productivity” in the text. Also, it is not seen the word of “productivity” in 2017. <strong>It can be said that post-crisis and productivity are related.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+plot_words_grepl(C_List, "verimlilik")
+```
+
+## Human Capital{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(hc_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: Penn World Tables 9.1", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Total Factor Productivity',
+                                    '<br>',
+                                    '<sup>',
+                                    'at constant national prices (2011 = 1)',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+The chart above shows the Index of Human Capital per person. It is seen that the human capital level tends to increase from 1996 to 2020, there is a positive trendline. The graph below shows the text of “sermaye” or “capital” in our data from 1996 to 2020. <strong>To compare the graphs below and above, there is no correlation or relation between the use of the word "capital" and human capital. </strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+plot_words_grepl(C_List, "sermaye")
+```
+
+## Gini Coefficient {.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(gini_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: World Development Indicators", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Gini Coefficient',
+                                    '<br>',
+                                    '<sup>',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+As it is seen in the Gini Coefficient data taken by World Development Indicators, the Gini coefficient level ranged between 38 and 44 from 2002 to 2018. On the other hand, the graph below shows the text of “Gini” in our data from 1996 to 2020. To compare the graphs, we should look the period of 2002 to 2018.<strong>The chart below shows there is a positive correlation that the word “gini” is referred in SSB’s reports as the gini index change, when the gini index level increases, the mention about gini coefficient increase.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+plot_words(C_List, "gini")
+```
+
+## Benefit Incidence of Social Protection and Labor Programs to Poorest Quintile{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(bensol_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: World Development Indicators", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Benefit Incidence of Social Protection and Labor Programs',
+                                    '<br>',
+                                    '<sup>',
+                                    '(to poorest quintile, % of total SPL benefits)',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+The chart above shows the Benefit Incidence of Social Protection and Labor Programs to Poorest Quintile data taken by World Development Indicators. Although the level decreased in some years, it showed an increasing tendency in general. There is a positive trendline, over the years, SPL benefits increased. We searched mentions in SBB reports: “koruma” and “yarar” or “protection” and “benefit”. <strong>SPL benefits data and words of “protection” and “benefit” in the reports are not met correctly.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+p1 <- plot_words_grepl(C_List,"koruma")
+p2 <- plot_words_grepl(C_List,"yarar")
+p1
+p2
+```
+
+## Water Stress{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(waterstress_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: OECD", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Water stress',
+                                    '<br>',
+                                    '<sup>',
+                                    '(Total freshwater abstraction, % total available renewable resources)',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+As it is seen in the Water Stress data taken by OECD, there is a few declines from 2004 to 2006, but the water stress level has increased every year since 2006, and it achieves the top in 2013-14. The graph below; on the other hand, shows the text of “su” or “water” in our data from 1996 to 2020. To compare the graphs above and below, we should look the period of 2004 to 2014. <strong>The chart below shows there is a positive correlation that the word “water” is referred in SSB’s reports as the water stress change, when the stress started do decrease, the mention about water declined, and when the stress started to increase, the mention about water has increase. However, mentions about water shows itself with a lag.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+plot_words(C_List, "su")
+```
+
+## Production-Based CO2 Production{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(co2_pbprod_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: OECD", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Production-based CO2 Productivity',
+                                    '<br>',
+                                    '<sup>',
+                                    'GDP per unit of energy-related CO2 emissions',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+The chart above shows the carbon-dioxide productivity. It is obviously seen that there is a positive trendline, over the years, CO2 emissions increased a lot, GDP per unit. There are some years that the CO2 emission decreased such as 2000 and 2008. Between 1998-2001, Turkey was struggling with an economic crisis, which resulted in a financial crisis in 2001 and many commercial banks bankrupted, these years, the economy was in recession and GDP declined. Because the components of GDP have affected, CO2 emissions declined because production must be slowed; therefore, factories emit less carbon-dioxide. Moreover, 2007-2009 Global Financial Crisis hit our country, and these years, our economy slowed down, which affected CO2 emissions as we see in graph.
+</font>
+</p>
+<p style="text-indent: 40px">
+<font size="4">
+There are two graphs that we think they are related with CO2 emission: First one is the counted words of “enerji” or “energy”, and the other one is “üretim” or “production” in SSB. <strong>Both table one and two have similar trends with CO2 emission trend, they are increased from 1996 to 2020; however, the crisis periods of 1998-2001 and 2007-2009 does not fit with emission graph. Briefly, they are met in terms of trend, but include some differences.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+p1 <- plot_words_grepl(C_List, "üretim")
+p2 <- plot_words_grepl(C_List, "enerji")
+p1
+p2
+```
+
+## Energy Productivity{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(energprod_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: OECD", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Energy Productivity',
+                                    '<br>',
+                                    '<sup>',
+                                    'GDP per unit of TPES',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+Energy productivity graph is also important because it is also related with the carbon-dioxide emission. As we seen the chart before, both energy productivity graph and CO2 emission graph has similar trendline, and similar decreased periods: 1998-2001 and 2007-2009 downturns.<strong> Moreover, the graph in above, the energy graph from the word “enerji” or “energy” has mentioned in SSB report has also similar trend, and similar up-downs with some exceptions.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+plot_words_grepl(C_List, "enerji")
+```
+
+## National Expenditure on Environmental Protection{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(natgdp_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: OECD", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('National Expenditure on Environmental Protection',
+                                    '<br>',
+                                    '<sup>',
+                                    '(% GDP)',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+<strong>The national expenditure on environmental production did not increased as GDP increased, or it may be expected to stay constant, but it is declined, unfortunately. The “doğa” or “nature” has mentioned in SSB report slightly, so the trend of expenditure and mentioning to nature is not correlated.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+plot_words(C_List, "doğa")
+```
+
+## Population Growth{.tabset .tabset-fade}
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+ggplotly(popgrowth_graph) %>%
+    layout(annotations = 
+           list(x = 1, y = -0.15, text = "Source: World Development Indicators", 
+                showarrow = F, xref = 'paper', yref = 'paper', 
+                xanchor = 'right', yanchor = 'auto', xshift = 0, yshift = 0,
+                font = list(size = 12, color = "#636363")), 
+         title = list(text = paste0('Population Growth',
+                                    '<br>',
+                                    '<sup>',
+                                    '</sup>')))
+```
+
+<p style="text-indent: 40px">
+<font size="4">
+Turkish population growth has a negative trendline in two periods: between 1996-2008 and after 2014. There is a sharp increase and sharp decrease in growth rate between the period of 2008-2014. The reports of SSB show that from 2002 to 2013, the word “nüfus” or “population” decreases, and suddenly it increases in the topics. <strong>Population growth data and word of “population” in the reports are not met correctly.</strong>
+</font>
+</p>
+```{r, warning = FALSE, echo = FALSE, out.width = "105%"}
+plot_words_grepl(C_List, "nüfus")
+```
+
+## Problems{.tabset .tabset-fade}
+<font size="4">
+<strong>
+Problems with SBB’s files we could not solve:
+</strong>
+</font>
+<p style="text-indent: 40px">
+<font size="4">
+The program shared in 2017 in the SBB’s website is created from photographs of a written document. R read this file after converting the pages of PDF file to PNG files. It led to some complications in the converted text. The Turkish letters “ü,ğ,ş,ı,ö,ç” converted to different letters and numbers without any patterns. For example, “ö” is converted to “6,o”, “ş”  is converted to “sg,g”, “ü” is converted to “ii,i,u” and etc. There are other problems other than Turkish letters. For instance, “rı” is converted to “n”. We could not find any solution for these problems. Thus, the text analysis we made may be wrong for the year 2017.
+The program shared in 2013 is a DOC file. R converted the Turkish Letters "ı,ğ,ş" to “?”. Considering that the words we will use in our analysis does not contain “ğ,ş” letters (except for the word “doğa”), we changed the character “?” to “ı”.
+</font>
+</p>
+
+
+
